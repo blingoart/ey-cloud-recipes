@@ -24,8 +24,7 @@ if node[:utility_instances].empty?
           node[:environment][:framework_env] => {
             :hosts => [ [ "localhost", @node[:mongo_port].to_i ] ] } } )
       else
-        hosts = @node[:mongo_utility_instances].select { |instance| instance[:name].match(/#{mongo_app_name}/) }.map { |instance| [ instance[:hostname], @node[:mongo_port].to_i ] }
-        hosts += @node[:mongo_utility_instances].select { |instance| instance[:name].match(/^mongodb_repl/) }.map { |instance| [ instance[:hostname], @node[:mongo_port].to_i ] }
+        hosts = @node[:mongo_utility_instances].select { |instance| instance[:name].match(/^mongodb_repl/) }.map { |instance| [ instance[:hostname], @node[:mongo_port].to_i ] }
         variables(:yaml_file => {
           node[:environment][:framework_env] => {
             :hosts => hosts} })
@@ -39,7 +38,7 @@ if node[:utility_instances].empty?
       group user[:username]
       mode 0755
 
-      hosts = @node[:mongo_utility_instances].select { |instance| instance[:name].match(/#{mongo_app_name}/) }.map { |instance| [ instance[:hostname], @node[:mongo_port].to_i ] }
+      hosts = []
       replica_set = @node[:mongo_utility_instances].any? { |instance| instance[:name].match(/^mongodb_repl/) }
       if replica_set
         hosts += @node[:mongo_utility_instances].select { |instance| instance[:name].match(/^mongodb_repl/) }.map { |instance| [ instance[:hostname], @node[:mongo_port].to_i ] }
